@@ -10,13 +10,32 @@ services:
     environment:
       - POSTGRES_DB=board
       - POSTGRES_PASSWORD=postgres
+
   web:
     build: .
+    restart: always
+    container_name: backend
+    command: bash -c "python manage.py migrate --run-syncdb && python manage.py collectstatic --noinput && python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/usr/src/app
     ports:
       - 8000:8000
     depends_on:
       - db
       - redis
+
+  celery:
+    build: .
+    container_name: celery
+    command: celery -A config worker -B
+    volumes:
+      - .:/usr/src/app
+    links:
+      - redis
+    depends_on:
+      - web
+      - redis
+
   redis:
     image: redis
     container_name: redis
