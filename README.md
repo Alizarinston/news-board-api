@@ -4,10 +4,12 @@
 
 ## Setup
 
-Use external services or start via Docker:
+Start via Docker:
 ```
 docker-compose up -d
 ```
+
+## Important CLI commands
 
 Migrate database:
 ```
