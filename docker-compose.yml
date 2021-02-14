@@ -1,0 +1,24 @@
+version: '3.7'
+
+services:
+  db:
+    image: postgres
+    container_name: pg
+    ports:
+      - 5432:5432
+    restart: always
+    environment:
+      - POSTGRES_DB=board
+      - POSTGRES_PASSWORD=postgres
+  web:
+    build: .
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+      - redis
+  redis:
+    image: redis
+    container_name: redis
+    ports:
+      - 6379:6379
