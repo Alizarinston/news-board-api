@@ -15,7 +15,7 @@ services:
     build: .
     restart: always
     container_name: backend
-    command: bash -c "python manage.py migrate --run-syncdb && python manage.py collectstatic --noinput && python manage.py runserver 0.0.0.0:8000"
+    command: bash -c "python manage.py migrate --run-syncdb && python manage.py loaddata init && python manage.py runserver 0.0.0.0:8000"
     volumes:
       - .:/usr/src/app
     ports:
@@ -24,14 +24,24 @@ services:
       - db
       - redis
 
-  celery:
+  celery-worker:
     build: .
-    container_name: celery
-    command: celery -A config worker -B
+    container_name: worker
+    command: celery -A config worker -l INFO
     volumes:
       - .:/usr/src/app
     links:
       - redis
+    depends_on:
+      - web
+      - redis
+
+  celery-beat:
+    build: .
+    container_name: beat
+    command: celery -A config beat -l INFO
+    volumes:
+      - .:/usr/src/app
     depends_on:
       - web
       - redis
