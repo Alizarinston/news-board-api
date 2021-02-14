@@ -39,4 +39,5 @@ Log in with credentials `admin / admin`.
 ## Documentation
 
 Static snapshot of Postman collection: https://www.getpostman.com/collections/618103bf3631da9a53ba
+
 Postman without environment: https://god.postman.co/run-collection/618103bf3631da9a53ba
